@@ -1,0 +1,20 @@
+{
+  "name": "googleapi",
+  "bin":"app.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "googleapis": "^39.2.0",
+    "socket.io": "^2.3.0"
+  },
+  "pkg":{
+    "targets":[
+      "node13-win-x64"
+    ]
+  },
+  "devDependencies": {},
+  "author": "Fernanda Trentino Silva",
+  "license": "ISC"
+}
