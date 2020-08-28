@@ -20,12 +20,14 @@
     <script>
       $(function () {
         var socket = io();
-        var counter = 0;
-        var objFiles = [];
+        var counter  = 0;
+       
+
+        $(document).ready(function(){
+          socket.emit('returnJson');
+        });
 
         $('#btn').click(function(e){
-          counter = ++counter;
-          socket.emit('returnJson',counter);
           $('#tableJson').append(
             $('<tr>').append(
               $('<th>').text('Id')
@@ -47,29 +49,8 @@
           alert("A autenticação do aplicativo é necessária");
         })  
 
-
         socket.on('returnJson', function(msg){
-          if (msg == 'objFiles'){
-          //  console.log(objFiles)
-            objFiles.map((obj)=>{
-              $('#tableJson').append(
-                $('<tr>').append(
-                  $('<td>').text(obj.id)
-                ).append(
-                  $('<td>').text(obj.name)
-                ).append(
-                  $('<td>').text(obj.mimeType)
-                ).append(
-                  $('<td>').text(obj.parents)
-                ).append(
-                  $('<td>').text(obj.version)
-                ).append(
-                  $('<td>').text(obj.owners)
-                )
-              )
-            })
-          } else{
-            objFiles.push(msg)
+            
             $('#tableJson').append(
               $('<tr>').append(
                 $('<td>').text(msg.id)
@@ -85,9 +66,7 @@
                 $('<td>').text(msg.owners)
               )
             )
-          }
         });
-      
       });
 
      
@@ -107,8 +86,8 @@
             <option value="Teste Aula">JavaScript</option>
           </datalist>
           <div class="input-group-append">
-            <button class="btn btn-success" type="button">OK</button>  
-            <button class="btn btn-danger" type="button">Cancel</button>  
+            <button class="btn btn-success" type="button" id='btnOk'>OK</button>  
+            <button class="btn btn-danger" type="button" id='btnCancel'>Cancel</button>  
           </div>
         </div>
       </div>
