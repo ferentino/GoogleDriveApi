@@ -20,14 +20,31 @@
     <script>
       $(function () {
         var socket = io();
-        var counter  = 0;
-       
+         
+        socket.on('createAuth',function(authURL){
+          alert("A autenticação do aplicativo é necessária");
+        })
 
         $(document).ready(function(){
-          socket.emit('returnJson');
+          socket.emit('returnJson',"parents:'0AMcW5zzmAKybUk9PVA' and mimeType='application/vnd.google-apps.folder'")
+        });
+       
+        socket.on('returnJson',(folder)=>{
+          $('#listEmp').append(
+            $('<option>').attr('value',folder.name).text(folder.id)
+          )
+           
+          
+
+
         });
 
-        $('#btn').click(function(e){
+        
+        
+        
+
+        $('#btnOk').click(function(e){
+          socket.emit('returnJson',"")
           $('#tableJson').append(
             $('<tr>').append(
               $('<th>').text('Id')
@@ -45,9 +62,7 @@
           );
         });
 
-        socket.on('createAuth',function(authURL){
-          alert("A autenticação do aplicativo é necessária");
-        })  
+          
 
         socket.on('returnJson', function(msg){
             
@@ -74,24 +89,19 @@
   </head>
   <body>
     <div class="container">
-      <table id='tableJson' style="width:100%" class="table table-striped"></table>
-      <button id='btn' class="btn btn-secondary">Empresa teste</button>
-    </div>
-    <div class="container">
       <h2>Arquivos no Google Drive</h2>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Digite o nome da empresa" id='flexdatalist' data-min-length='1' list='empresa'>
-          <datalist id="empresa">
-            <option value="Ginco">PHP</option>
-            <option value="Teste Aula">JavaScript</option>
-          </datalist>
-          <div class="input-group-append">
-            <button class="btn btn-success" type="button" id='btnOk'>OK</button>  
-            <button class="btn btn-danger" type="button" id='btnCancel'>Cancel</button>  
-          </div>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Digite o nome da empresa" id='flexdatalist' data-min-length='1' list='listEmp'>
+        <datalist id="listEmp">          </datalist>
+        <div class="input-group-append">
+          <button class="btn btn-success" type="button" id='btnOk'>OK</button>  
+          <button class="btn btn-danger" type="button" id='btnCancel'>Cancel</button>  
         </div>
       </div>
+      <div class="container">
+        <table id='tableJson' style="width:100%" class="table table-striped"></table>
       </div>
+    
     </div>
     
     
