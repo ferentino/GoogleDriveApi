@@ -60,7 +60,8 @@ io.on('connection', function(socket){
   
   function returnJson(auth){
     
-    socket.on('returnJson',(msg)=>{
+    socket.on('returnFolders',(msg)=>{
+      console.log(msg)
       const drive = google.drive({version: 'v3', auth});
       drive.files.list({
         q: msg ,
@@ -76,12 +77,41 @@ io.on('connection', function(socket){
             result.push(
               file
             )
-            socket.emit('returnJson',file);
+            socket.emit('returnFolders',file);
           });
         } else {
           console.log('No files found.');
         }
         
+      });
+    })
+  
+    socket.on('returnFiles',(msg)=>{
+      console.log(msg)
+      const drive = google.drive({version: 'v3', auth});
+      drive.files.list({
+        q: msg ,
+        filesize: 5, 
+        fields: 'nextPageToken, files(id,name,mimeType,parents,version,webContentLink,webViewLink,owners,viewedByMe,viewedByMeTime,createdTime,modifiedTime, modifiedByMeTime,lastModifyingUser,fullFileExtension)',
+        
+      }, (err, res) => {
+        var result = []
+        if (err) return console.log('The API returned an error: ' + err);
+        const files = res.data.files;
+        if (files.length) {
+          files.map((file)=>{
+            result.push(
+              file
+            )
+          });
+        } else {
+          console.log('No files found.');
+        }
+      result.map((obj)=>{
+        console.log(obj)
+        socket.emit('returnFiles',obj);
+
+      })
       });
     })
   }
